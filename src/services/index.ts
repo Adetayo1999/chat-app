@@ -1,8 +1,10 @@
 import axios from "axios";
 
+const SERVER_URL: any = process.env.REACT_APP_SERVER_URL;
+
 const AxiosInstance = () => {
   const config: any = {
-    baseURL: "http://localhost:8080/api/v1",
+    baseURL: SERVER_URL,
     headers: {},
     withCredentials: true,
   };
