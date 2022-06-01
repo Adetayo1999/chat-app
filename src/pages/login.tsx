@@ -55,7 +55,7 @@ function Login() {
                 } catch (error: any) {
                   setSubmitting(false);
                   toast.error(
-                    (error.response && error.response.data.message) ||
+                    (error.response && error.response?.data?.message) ||
                       error.message
                   );
                 }

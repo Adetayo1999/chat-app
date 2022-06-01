@@ -22,7 +22,7 @@ function Home() {
 
   const updateConversationMessage = useCallback(
     (index: number, data: any) => {
-      const newConversation: any[] = conversations;
+      const newConversation: any[] = [...conversations];
       newConversation[index].messages = data;
       setConversations(newConversation);
     },
@@ -40,13 +40,15 @@ function Home() {
       setConversations((prev) =>
         prev.map((convo) => {
           if (convo._id === newMessage.conversationID) {
-            convo.messages.push(newMessage);
-            if (!convo.latestMessage) convo.latestMessage = {};
+            const newConvo = { ...convo };
+            newConvo.messages.push(newMessage);
+            if (!newConvo.latestMessage) newConvo.latestMessage = {};
 
-            convo.latestMessage = {
+            newConvo.latestMessage = {
               _id: newMessage._id,
               text: newMessage.text,
             };
+            return newConvo;
           }
           return convo;
         })
@@ -72,18 +74,20 @@ function Home() {
         prev.map((convo) => {
           if (convo._id === data.conversationID) {
             toast.success(`[${convo.otherUser.username}]: ${data.text}`);
-            if (convo._id !== currentChat.conversation?.conversationID) {
-              convo.newMessages = (convo.newMessages || 0) + 1;
+            const newConvo = { ...convo };
+            if (newConvo._id !== currentChat.conversation?.conversationID) {
+              newConvo.newMessages = (newConvo.newMessages || 0) + 1;
             }
 
-            if (!convo.latestMessage) convo.latestMessage = {};
-            convo.latestMessage = {
+            if (!newConvo.latestMessage) newConvo.latestMessage = {};
+            newConvo.latestMessage = {
               _id: data._id,
               text: data.text,
             };
-            if (convo.messages) {
-              convo.messages.push(data);
+            if (newConvo.messages) {
+              newConvo.messages.push(data);
             }
+            return newConvo;
           }
           return convo;
         })
@@ -97,7 +101,9 @@ function Home() {
     setConversations((prev) =>
       prev.map((convo) => {
         if (convo._id === conversationID) {
-          convo.newMessages = 0;
+          const newConvo = { ...convo };
+          newConvo.newMessages = 0;
+          return newConvo;
         }
         return convo;
       })
